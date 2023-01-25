@@ -36,7 +36,12 @@ function App() {
         );
         const json = await response.json();
         console.log(json);
-        setData(json);
+        const filteredData = json.data.records.filter(
+          (record) =>
+            record.connectionSpeed !== "unknown" &&
+            record.connectionSpeed !== "---"
+        );
+        setData(filteredData);
       } catch (error) {
         console.log(error);
       }
@@ -44,14 +49,10 @@ function App() {
     fetchData();
   }, []);
 
-  const filteredData = data.data.records.filter(
-    (record) =>
-      record.connectionSpeed !== "unknown" && record.connectionSpeed !== "---"
-  );
   return (
     <div>
       {data ? (
-        <DataTable columns={columns} data={filteredData} />
+        <DataTable columns={columns} data={data} />
       ) : (
         <div>Loading...</div>
       )}
